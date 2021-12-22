@@ -1,4 +1,5 @@
 import java.io.File
+import kotlin.IndexOutOfBoundsException
 
 /**
 Дан текстовый файл, в котором схематично изображена схема прямоугольного мини-лабиринта:
@@ -46,6 +47,7 @@ fun robotInMaze(inputName: String): String {
         }
         while ((right in allowed) && (start != end)) {
             start = right
+            down = Pair(start.first, start.second + 1)
             right = Pair(start.first + 1, start.second)
             up = Pair(start.first, start.second - 1)
             left = Pair(start.first - 1, start.second)
@@ -53,15 +55,23 @@ fun robotInMaze(inputName: String): String {
         }
         while ((up in allowed) && (start != end)) {
             start = up
+            down = Pair(start.first, start.second + 1)
+            right = Pair(start.first + 1, start.second)
             up = Pair(start.first, start.second - 1)
             left = Pair(start.first - 1, start.second)
             way += 'u'
         }
         while ((left in allowed) && (start != end)) {
             start = left
+            down = Pair(start.first, start.second + 1)
+            right = Pair(start.first + 1, start.second)
+            up = Pair(start.first, start.second - 1)
             left = Pair(start.first - 1, start.second)
             way += 'l'
         }
+             if ((down !in allowed && right !in allowed && up !in allowed && left !in allowed) || (way.length > 20)) {
+                throw IndexOutOfBoundsException()}
+
     }
     return way
 }
@@ -70,4 +80,6 @@ fun main() {
     println(robotInMaze("src/main/resources/Maze1"))
     println(robotInMaze("src/main/resources/Maze2"))
     println(robotInMaze("src/main/resources/Maze3"))
+    println(robotInMaze("src/main/resources/Maze5"))
+    println(robotInMaze("src/main/resources/Maze4"))
 }
