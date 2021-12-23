@@ -61,10 +61,7 @@ fun robotInMaze(inputName: String): String {
                 start,
                 upDelta
             ) !in allowed && offset(start, leftDelta) !in allowed) || (way.length > mazeSize)
-        ) {
-            throw IllegalArgumentException("I can't move")
-        }
-
+        ) throw IllegalArgumentException("I can't move")
     }
     return way
 }
