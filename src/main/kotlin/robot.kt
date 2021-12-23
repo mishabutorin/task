@@ -12,17 +12,18 @@ import kotlin.IndexOutOfBoundsException
 где r обозначает движение на клетку вправо, l влево, u вверх и d вниз, такую, чтобы робот,
 исполнив эти команды, прошёл от своего начального местоположения до цели (на препятствия наступать нельзя).
 В случае, если подобный проход невозможен, следует бросить исключение (любое на ваш выбор). */
+
 fun offset(current: Pair<Int, Int>, delta: Pair<Int, Int>): Pair<Int, Int> {
     return Pair(current.first + delta.first, current.second + delta.second)
 }
 
 fun robotInMaze(inputName: String): String {
     val allowed = mutableSetOf<Pair<Int, Int>>()
-    var way = ""  //результат
-    val inputFile = File(inputName).readLines() //импортируемый файл
+    var way = ""
+    val inputFile = File(inputName).readLines()
     var start = Pair(0, 0)
     var end = Pair(0, 0)
-    for ((y, str) in inputFile.withIndex()) { //прохождение по всем сивмолам файла
+    for ((y, str) in inputFile.withIndex()) {
         for ((x, symbol) in str.withIndex()) {
             if (symbol == '.') {
                 allowed.add(Pair(x, y))
@@ -57,7 +58,11 @@ fun robotInMaze(inputName: String): String {
             start = offset(start, leftDelta)
             way += 'l'
         }
-        if ((offset(start, downDelta) !in allowed && offset(start, rightDelta) !in allowed && offset(start, upDelta) !in allowed && offset(start, leftDelta) !in allowed) || (way.length > mazeSize)) {
+        if ((offset(start, downDelta) !in allowed && offset(start, rightDelta) !in allowed && offset(
+                start,
+                upDelta
+            ) !in allowed && offset(start, leftDelta) !in allowed) || (way.length > mazeSize)
+        ) {
             throw IllegalArgumentException("I can't move")
         }
 
