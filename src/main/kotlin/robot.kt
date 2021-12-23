@@ -1,5 +1,4 @@
 import java.io.File
-import kotlin.IndexOutOfBoundsException
 
 /**
 Дан текстовый файл, в котором схематично изображена схема прямоугольного мини-лабиринта:
