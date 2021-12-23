@@ -12,6 +12,9 @@ import kotlin.IndexOutOfBoundsException
 где r обозначает движение на клетку вправо, l влево, u вверх и d вниз, такую, чтобы робот,
 исполнив эти команды, прошёл от своего начального местоположения до цели (на препятствия наступать нельзя).
 В случае, если подобный проход невозможен, следует бросить исключение (любое на ваш выбор). */
+fun offset(current: Pair<Int, Int>, delta: Pair<Int, Int>): Pair<Int, Int> {
+    return Pair(current.first + delta.first, current.second + delta.second)
+}
 
 fun robotInMaze(inputName: String): String {
     val allowed = mutableSetOf<Pair<Int, Int>>()
@@ -32,45 +35,31 @@ fun robotInMaze(inputName: String): String {
             }
         }
     }
+    val mazeSize = inputFile.size * inputFile[0].length
+    val downDelta = Pair(0, +1)
+    val rightDelta = Pair(+1, 0)
+    val upDelta = Pair(0, -1)
+    val leftDelta = Pair(-1, 0)
     while (start != end) {
-        var right = Pair(start.first + 1, start.second)
-        var left = Pair(start.first - 1, start.second)
-        var up = Pair(start.first, start.second - 1)
-        var down = Pair(start.first, start.second + 1)
-        while ((down in allowed) && (start != end)) {
-            start = down
-            down = Pair(start.first, start.second + 1)
-            right = Pair(start.first + 1, start.second)
-            up = Pair(start.first, start.second - 1)
-            left = Pair(start.first - 1, start.second)
+        while ((offset(start, downDelta) in allowed) && (start != end)) {
+            start = offset(start, downDelta)
             way += 'd'
         }
-        while ((right in allowed) && (start != end)) {
-            start = right
-            down = Pair(start.first, start.second + 1)
-            right = Pair(start.first + 1, start.second)
-            up = Pair(start.first, start.second - 1)
-            left = Pair(start.first - 1, start.second)
+        while ((offset(start, rightDelta) in allowed) && (start != end)) {
+            start = offset(start, rightDelta)
             way += 'r'
         }
-        while ((up in allowed) && (start != end)) {
-            start = up
-            down = Pair(start.first, start.second + 1)
-            right = Pair(start.first + 1, start.second)
-            up = Pair(start.first, start.second - 1)
-            left = Pair(start.first - 1, start.second)
+        while ((offset(start, upDelta) in allowed) && (start != end)) {
+            start = offset(start, upDelta)
             way += 'u'
         }
-        while ((left in allowed) && (start != end)) {
-            start = left
-            down = Pair(start.first, start.second + 1)
-            right = Pair(start.first + 1, start.second)
-            up = Pair(start.first, start.second - 1)
-            left = Pair(start.first - 1, start.second)
+        while ((offset(start, leftDelta) in allowed) && (start != end)) {
+            start = offset(start, leftDelta)
             way += 'l'
         }
-             if ((down !in allowed && right !in allowed && up !in allowed && left !in allowed) || (way.length > 20)) {
-                throw IndexOutOfBoundsException()}
+        if ((offset(start, downDelta) !in allowed && offset(start, rightDelta) !in allowed && offset(start, upDelta) !in allowed && offset(start, leftDelta) !in allowed) || (way.length > mazeSize)) {
+            throw IllegalArgumentException("I can't move")
+        }
 
     }
     return way
@@ -80,6 +69,6 @@ fun main() {
     println(robotInMaze("src/main/resources/Maze1"))
     println(robotInMaze("src/main/resources/Maze2"))
     println(robotInMaze("src/main/resources/Maze3"))
-    println(robotInMaze("src/main/resources/Maze5"))
     println(robotInMaze("src/main/resources/Maze4"))
+    println(robotInMaze("src/main/resources/Maze5"))
 }
